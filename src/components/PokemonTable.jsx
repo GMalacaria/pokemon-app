@@ -1,14 +1,14 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import PokemonRow from "./PokemonRow";
+import usePokemonStore from "../store/PokemonStore";
 
 const PokemonTable = () => {
-  const { filter, pokemon } = useSelector(({ filter, pokemon }) => ({
-    filter,
-    pokemon,
-  }));
+  const pokemon = usePokemonStore((state) => state.pokemon);
+  const filter = usePokemonStore((state) => state.filter);
+  const setSelectedPokemon = usePokemonStore(
+    (state) => state.setSelectedPokemon
+  );
 
-  const dispatch = useDispatch();
   const startIndex = 0;
   const endIndex = 20;
 
@@ -24,9 +24,7 @@ const PokemonTable = () => {
             <PokemonRow
               key={`row-${pokemon.id}`}
               pokemon={pokemon}
-              onClick={(pokemon) =>
-                dispatch({ type: "SET_SELECTED_POKEMON", payload: pokemon })
-              }
+              onClick={(pokemon) => setSelectedPokemon(pokemon)}
             ></PokemonRow>
           ))}
       </tbody>

@@ -1,13 +1,10 @@
 import { Input } from "@mui/material";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import usePokemonStore from "../store/PokemonStore";
 
 const PokemonFilter = () => {
-  const { filter } = useSelector(({ filter }) => ({
-    filter,
-  }));
-
-  const dispatch = useDispatch();
+  const filter = usePokemonStore((state) => state.filter);
+  const setFilter = usePokemonStore((state) => state.setFilter);
 
   return (
     <Input
@@ -15,9 +12,7 @@ const PokemonFilter = () => {
       type="text"
       value={filter}
       placeholder="Search Pokémon"
-      onChange={(evt) =>
-        dispatch({ type: "SET_FILTER", payload: evt.target.value })
-      }
+      onChange={(evt) => setFilter(evt.target.value)}
     />
   );
 };
