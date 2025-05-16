@@ -1,18 +1,17 @@
 import React from "react";
-import usePokemonStore from "../store/PokemonStore";
+import pokemonStore from "../store/PokemonStore";
+import { observer } from "mobx-react";
 
 const PokemonInfo = () => {
-  const selectedPokemon = usePokemonStore((state) => state.selectedPokemon);
-
-  return selectedPokemon ? (
+  return pokemonStore.selectedPokemon ? (
     <>
-      <h2>{selectedPokemon.name.english}</h2>
+      <h2>{pokemonStore.selectedPokemon.name.english}</h2>
       <table>
         <tbody>
-          {Object.keys(selectedPokemon.base).map((key) => (
+          {Object.keys(pokemonStore.selectedPokemon.base).map((key) => (
             <tr key={`detail-${key}`}>
               <td>{key}</td>
-              <td>{selectedPokemon.base[key]}</td>
+              <td>{pokemonStore.selectedPokemon.base[key]}</td>
             </tr>
           ))}
         </tbody>
@@ -21,4 +20,4 @@ const PokemonInfo = () => {
   ) : null;
 };
 
-export default PokemonInfo;
+export default observer(PokemonInfo);

@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import React from "react";
+import PokemonType from "../pokemonType";
 
 const PokemonRow = ({ pokemon, onClick }) => (
   <tr key={pokemon.id}>
@@ -16,5 +17,7 @@ const PokemonRow = ({ pokemon, onClick }) => (
     </td>
   </tr>
 );
+
+PokemonRow.propTypes = { pokwmon: PokemonType };
 
 export default PokemonRow;

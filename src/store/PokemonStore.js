@@ -1,19 +1,40 @@
-import create, { useStore } from "zustand";
+import { computed, makeObservable, observable } from "mobx";
 
-const usePokemonStore = create((set) => ({
-  pokemon: [],
-  filter: "",
-  selectedPokemon: null,
-  setPokemon: (pokemon) => set((state) => ({ ...state, pokemon })),
-  setFilter: (filter) => set((state) => ({ ...state, filter })),
-  setSelectedPokemon: (selectedPokemon) =>
-    set((state) => ({ ...state, selectedPokemon })),
-}));
+class PokemonStore {
+  pokemon = [];
+  filter = "";
+  selectedPokemon = null;
+  constructor() {
+    makeObservable(this, {
+      pokemon: observable,
+      filter: observable,
+      selectedPokemon: observable,
+      filterPokemon: computed,
+    });
+  }
+
+  get filterPokemon() {
+    return this.pokemon.filter(({ name: { english } }) =>
+      english.toLowerCase().includes(this.filter.toLowerCase())
+    );
+  }
+
+  setPokemon(pokemon) {
+    this.pokemon = pokemon;
+  }
+  setFilter(filter) {
+    this.filter = filter;
+  }
+  setSelectedPokemon(selectedPokemon) {
+    this.selectedPokemon = selectedPokemon;
+  }
+}
+
+const pokemonStore = new PokemonStore();
 
 fetch("../pokemon.json")
   .then((resp) => resp.json())
-  .then((pokemon) =>
-    usePokemonStore.setState((state) => ({ ...state, pokemon: pokemon }))
-  );
+  .then((pokemon) => pokemonStore.setPokemon(pokemon))
+  .catch((err) => console.error("Error fetching Pokemon data:", err));
 
-export default usePokemonStore;
+export default pokemonStore;
